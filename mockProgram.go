@@ -7,8 +7,9 @@ import (
 )
 
 func main() {
-	flag := flag.String("f", "mockProgram.conf", "config file")
+	f := flag.String("f", "mockProgram.conf", "config file")
 	var a, b int
+	fmt.Println("flag:", *f)
 	for {
 		_, err := fmt.Scanf("%d %d", &a, &b)
 		if err != nil {
