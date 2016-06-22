@@ -54,7 +54,6 @@ func testFileRename() {
 	if err != nil {
 		errMsg(52, err)
 	}
-
 }
 
 func main() {
