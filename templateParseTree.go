@@ -13,6 +13,15 @@ func errMsg(line int, err error) {
 func main() {
 	filename := "template.conf"
 	t := template.New(filename)
+
+	fmap := template.FuncMap{
+		"minus": func(a, b int) int {
+			return a - b
+		},
+	}
+
+	t = t.Funcs(fmap)
+
 	t, err := t.ParseFiles(filename)
 	if err != nil {
 		errMsg(18, err)
@@ -25,20 +34,30 @@ func main() {
 	fmt.Println("length of nodes is:", l)
 
 	for _, v := range t.Root.Nodes {
-		if v.Type() == parse.NodeAction {
-			//fmt.Println("assert type NodeAction:", v.Type() == parse.NodeAction)
-			tmpNode := v.(*parse.ActionNode)
-			for kk, vv := range tmpNode.Pipe.Cmds {
-				fmt.Printf("   index:%d, value:%v\n", kk, vv)
-			}
+		if v.Type() != parse.NodeText {
+			fmt.Printf("NodeName:%s NodeType:%v\n", v.String(), v.Type())
 
-			/*for kk, vv := range tmpNode.Pipe.Decl {
-				fmt.Printf("   index:%d, value:%v\n", kk, vv)
-			}*/
+			if v.Type() == parse.NodeAction {
+				tmpNode := v.(*parse.ActionNode)
+				for kk, vv := range tmpNode.Pipe.Cmds {
+					fmt.Printf("	index:%d, value:%v\n", kk, vv)
+					for kkk, vvv := range vv.Args {
+						fmt.Printf("		index:%d, value:%v\n", kkk, vvv)
+					}
+				}
+			} else if v.Type() == parse.NodeRange {
+				tmpNode := v.(*parse.RangeNode)
+				for kk, vv := range tmpNode.Pipe.Cmds {
+					fmt.Printf("	index:%d, value:%v\n", kk, vv)
+					for kkk, vvv := range vv.Args {
+						fmt.Printf("		index:%d, value:%v\n", kkk, vvv)
+					}
+				}
+			}
 		}
 	}
 
-	fmt.Println("t.ParseName:", t.ParseName)
-	fmt.Printf("t.Tree.Name:%s, t.Tree.ParseName:%s", t.Tree.Name, t.Tree.ParseName)
+	//fmt.Println("t.ParseName:", t.ParseName)
+	//fmt.Printf("t.Tree.Name:%s, t.Tree.ParseName:%s", t.Tree.Name, t.Tree.ParseName)
 
 }
