@@ -24,17 +24,17 @@ func main() {
 	l := len(rn)
 	fmt.Println("length of nodes is:", l)
 
-	for k, v := range t.Root.Nodes {
+	for _, v := range t.Root.Nodes {
 		if v.Type() == parse.NodeAction {
 			//fmt.Println("assert type NodeAction:", v.Type() == parse.NodeAction)
-			tmpNode := v.(parse.ActionNode)
+			tmpNode := v.(*parse.ActionNode)
 			for kk, vv := range tmpNode.Pipe.Cmds {
 				fmt.Printf("   index:%d, value:%v\n", kk, vv)
 			}
 
-			for kk, vv := range tmpNode.Pipe.Decl {
+			/*for kk, vv := range tmpNode.Pipe.Decl {
 				fmt.Printf("   index:%d, value:%v\n", kk, vv)
-			}
+			}*/
 		}
 	}
 
